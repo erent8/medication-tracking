@@ -55,8 +55,8 @@ pandas==2.1.3
 
 1. Repoyu klonlayın:
 ```bash
-git clone https://github.com/kullaniciadi/saglik-takip.git
-cd saglik-takip
+git clone https://github.com/erent8/medication-tracking
+cd medication-tracking
 ```
 
 2. Sanal ortam oluşturun ve aktifleştirin:
@@ -78,7 +78,7 @@ pip install -r requirements.txt
 FLASK_APP=run.py
 FLASK_ENV=development
 SECRET_KEY=gizli_anahtar_buraya_yazilacak
-DATABASE_URL=sqlite:///saglik_takip.db
+DATABASE_URL=sqlite:///medication-tracking
 ```
 
 5. Veritabanını oluşturun:
