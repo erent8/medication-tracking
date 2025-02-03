@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block title %}Kontrol Paneli - İlaç Takip{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Hoş Geldin Mesajı -->
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="display-5 fw-bold">Hoş Geldin, {{ current_user.ad }}!</h1>
+            <p class="lead">Günlük sağlık takibinizi buradan yapabilirsiniz.</p>
+        </div>
+    </div>
+
+    <!-- Hızlı Eylemler -->
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Hızlı Eylemler</h5>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a href="{{ url_for('medicine.add') }}" class="btn btn-primary">
+                            <i class="fas fa-plus-circle me-1"></i>İlaç Ekle
+                        </a>
+                        <a href="{{ url_for('health.add_metric') }}" class="btn btn-success">
+                            <i class="fas fa-chart-line me-1"></i>Ölçüm Ekle
+                        </a>
+                        <a href="{{ url_for('health.add_appointment') }}" class="btn btn-info text-white">
+                            <i class="fas fa-calendar-plus me-1"></i>Randevu Al
+                        </a>
+                        <a href="{{ url_for('main.calendar') }}" class="btn btn-secondary">
+                            <i class="fas fa-calendar-alt me-1"></i>Takvimi Görüntüle
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ana Kartlar -->
+    <div class="row g-4 mb-4">
+        <!-- Aktif İlaçlar -->
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-pills me-2"></i>Aktif İlaçlarım
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if active_medicines %}
+                        <div class="list-group list-group-flush">
+                            {% for medicine in active_medicines %}
+                                <a href="{{ url_for('medicine.view', id=medicine.id) }}" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">{{ medicine.ad }}</h6>
+                                        <small>{{ medicine.recete.dozaj }}</small>
+                                    </div>
+                                    <p class="mb-1">{{ medicine.recete.kullanim_sekli }}</p>
+                                    <small class="text-muted">
+                                        Bitiş: {{ medicine.recete.bitis_tarihi.strftime('%d.%m.%Y') }}
+                                    </small>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center my-3">Aktif ilaç bulunmuyor.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Yaklaşan Hatırlatıcılar -->
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-bell me-2"></i>Yaklaşan Hatırlatıcılar
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if upcoming_reminders %}
+                        <div class="list-group list-group-flush">
+                            {% for reminder in upcoming_reminders %}
+                                <div class="list-group-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">{{ reminder.ilac.ad }}</h6>
+                                        <small class="text-primary">
+                                            {{ reminder.zaman.strftime('%H:%M') }}
+                                        </small>
+                                    </div>
+                                    <p class="mb-1">{{ reminder.recete.dozaj }}</p>
+                                    <small class="text-muted">
+                                        {{ reminder.recete.kullanim_sekli }}
+                                    </small>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center my-3">Yaklaşan hatırlatıcı bulunmuyor.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Yaklaşan Randevular -->
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header bg-info text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-calendar-alt me-2"></i>Yaklaşan Randevular
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if upcoming_appointments %}
+                        <div class="list-group list-group-flush">
+                            {% for appointment in upcoming_appointments %}
+                                <a href="{{ url_for('health.appointments') }}" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">Dr. {{ appointment.doktor.ad }} {{ appointment.doktor.soyad }}</h6>
+                                        <small>{{ appointment.tarih.strftime('%d.%m.%Y') }}</small>
+                                    </div>
+                                    <p class="mb-1">{{ appointment.tip }}</p>
+                                    <small class="text-muted">
+                                        {{ appointment.tarih.strftime('%H:%M') }} - {{ appointment.doktor.hastane }}
+                                    </small>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center my-3">Yaklaşan randevu bulunmuyor.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Son Sağlık Ölçümleri -->
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header bg-success text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-heartbeat me-2"></i>Son Sağlık Ölçümleri
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_metrics %}
+                        <div class="list-group list-group-flush">
+                            {% for metric in recent_metrics %}
+                                <a href="{{ url_for('health.metrics') }}" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">{{ metric.tip }}</h6>
+                                        <small>{{ metric.tarih.strftime('%d.%m.%Y %H:%M') }}</small>
+                                    </div>
+                                    <p class="mb-1">{{ metric.deger }} {{ metric.birim }}</p>
+                                    {% if metric.notlar %}
+                                        <small class="text-muted">{{ metric.notlar }}</small>
+                                    {% endif %}
+                                </a>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center my-3">Henüz ölçüm kaydedilmemiş.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.card {
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.list-group-item {
+    transition: background-color 0.2s;
+}
+
+.list-group-item:hover {
+    background-color: #f8f9fa;
+}
+
+.btn {
+    transition: all 0.2s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+</style>
+{% endblock %} 

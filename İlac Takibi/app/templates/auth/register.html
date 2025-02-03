@@ -1,0 +1,282 @@
+{% extends "base.html" %}
+
+{% block title %}Kayıt - İlaç Takip{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center py-3">
+                    <h4 class="card-title mb-0">
+                        <i class="fas fa-user-plus me-2"></i>Yeni Hesap Oluştur
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" action="{{ url_for('auth.register') }}" class="needs-validation" novalidate>
+                        <!-- Kişisel Bilgiler -->
+                        <h5 class="mb-3">
+                            <i class="fas fa-user me-2"></i>Kişisel Bilgiler
+                        </h5>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="ad" class="form-label">Ad</label>
+                                <input type="text" class="form-control" id="ad" name="ad" required>
+                                <div class="invalid-feedback">
+                                    Lütfen adınızı girin.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="soyad" class="form-label">Soyad</label>
+                                <input type="text" class="form-control" id="soyad" name="soyad" required>
+                                <div class="invalid-feedback">
+                                    Lütfen soyadınızı girin.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="dogum_tarihi" class="form-label">Doğum Tarihi</label>
+                                <input type="date" class="form-control" id="dogum_tarihi" name="dogum_tarihi" required>
+                                <div class="invalid-feedback">
+                                    Lütfen doğum tarihinizi seçin.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="cinsiyet" class="form-label">Cinsiyet</label>
+                                <select class="form-select" id="cinsiyet" name="cinsiyet" required>
+                                    <option value="">Seçiniz</option>
+                                    <option value="E">Erkek</option>
+                                    <option value="K">Kadın</option>
+                                    <option value="D">Diğer</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Lütfen cinsiyet seçin.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- İletişim Bilgileri -->
+                        <h5 class="mb-3 mt-4">
+                            <i class="fas fa-address-card me-2"></i>İletişim Bilgileri
+                        </h5>
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label">E-posta Adresi</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-envelope"></i>
+                                </span>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                            <div class="invalid-feedback">
+                                Lütfen geçerli bir e-posta adresi girin.
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="telefon" class="form-label">Telefon Numarası</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-phone"></i>
+                                </span>
+                                <input type="tel" class="form-control" id="telefon" name="telefon" pattern="[0-9]{10}" placeholder="5XX XXX XX XX" required>
+                            </div>
+                            <div class="invalid-feedback">
+                                Lütfen geçerli bir telefon numarası girin.
+                            </div>
+                        </div>
+                        
+                        <!-- Güvenlik -->
+                        <h5 class="mb-3 mt-4">
+                            <i class="fas fa-lock me-2"></i>Güvenlik
+                        </h5>
+                        
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Şifre</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                                <input type="password" class="form-control" id="password" name="password" required
+                                       pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$">
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="form-text">
+                                Şifreniz en az 8 karakter uzunluğunda olmalı ve harf ile rakam içermelidir.
+                            </div>
+                            <div class="invalid-feedback">
+                                Lütfen güvenli bir şifre oluşturun.
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="password_confirm" class="form-label">Şifre (Tekrar)</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                                <input type="password" class="form-control" id="password_confirm" name="password_confirm" required>
+                                <button class="btn btn-outline-secondary" type="button" id="togglePasswordConfirm">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="invalid-feedback">
+                                Şifreler eşleşmiyor.
+                            </div>
+                        </div>
+                        
+                        <!-- Onay -->
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
+                            <label class="form-check-label" for="terms">
+                                <a href="#" class="text-decoration-none">Kullanım Koşulları</a>'nı ve
+                                <a href="#" class="text-decoration-none">Gizlilik Politikası</a>'nı okudum ve kabul ediyorum.
+                            </label>
+                            <div class="invalid-feedback">
+                                Devam etmek için kullanım koşullarını kabul etmelisiniz.
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-user-plus me-2"></i>Kayıt Ol
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="text-center">
+                        <p class="mb-0">
+                            Zaten hesabınız var mı?
+                            <a href="{{ url_for('auth.login') }}" class="text-decoration-none">
+                                Giriş Yapın
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Form doğrulama
+(function() {
+    'use strict';
+    var forms = document.querySelectorAll('.needs-validation');
+    Array.prototype.slice.call(forms).forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            
+            // Şifre kontrolü
+            var password = document.getElementById('password');
+            var passwordConfirm = document.getElementById('password_confirm');
+            
+            if (password.value !== passwordConfirm.value) {
+                passwordConfirm.setCustomValidity('Şifreler eşleşmiyor.');
+                event.preventDefault();
+                event.stopPropagation();
+            } else {
+                passwordConfirm.setCustomValidity('');
+            }
+            
+            form.classList.add('was-validated');
+        }, false);
+    });
+})();
+
+// Şifre göster/gizle
+function togglePasswordVisibility(inputId, buttonId) {
+    const input = document.getElementById(inputId);
+    const button = document.getElementById(buttonId);
+    const icon = button.querySelector('i');
+    
+    button.addEventListener('click', function() {
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    });
+}
+
+togglePasswordVisibility('password', 'togglePassword');
+togglePasswordVisibility('password_confirm', 'togglePasswordConfirm');
+
+// Telefon numarası formatı
+document.getElementById('telefon').addEventListener('input', function(e) {
+    let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+    e.target.value = !x[2] ? x[1] : x[1] + ' ' + x[2] + (x[3] ? ' ' + x[3] : '') + (x[4] ? ' ' + x[4] : '');
+});
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.card {
+    border: none;
+    border-radius: 15px;
+}
+
+.card-header {
+    border-radius: 15px 15px 0 0 !important;
+}
+
+.input-group-text {
+    background-color: transparent;
+    border-right: none;
+}
+
+.form-control {
+    border-left: none;
+}
+
+.form-control:focus {
+    border-color: #dee2e6;
+    box-shadow: none;
+}
+
+.input-group .form-control:focus ~ .input-group-text {
+    border-color: #dee2e6;
+}
+
+.btn-primary {
+    padding: 12px;
+    font-weight: 500;
+}
+
+.btn-outline-secondary {
+    border-left: none;
+}
+
+.btn-outline-secondary:hover {
+    background-color: transparent;
+    color: #0d6efd;
+}
+
+.form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+h5 {
+    color: #0d6efd;
+    font-weight: 600;
+}
+</style>
+{% endblock %} 

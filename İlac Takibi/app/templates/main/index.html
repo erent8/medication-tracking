@@ -1,0 +1,296 @@
+{% extends "base.html" %}
+
+{% block title %}Ana Sayfa - Sağlık Takip{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Hero Section -->
+    <div class="hero-section text-center py-5 mb-5">
+        <h1 class="display-4 fw-bold mb-3">Sağlığınız İçin Akıllı Takip</h1>
+        <p class="lead mb-4">Sağlık verilerinizi yönetin, randevularınızı takip edin ve kişiselleştirilmiş önerilerden faydalanın.</p>
+        {% if not current_user.is_authenticated %}
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg px-4">
+                <i class="fas fa-user-plus me-2"></i>Hemen Başlayın
+            </a>
+            <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary btn-lg px-4">
+                <i class="fas fa-sign-in-alt me-2"></i>Giriş Yap
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Sağlık İpuçları -->
+    <div class="row mb-5">
+        <div class="col-12 text-center mb-4">
+            <h2>Sağlıklı Yaşam Rehberi</h2>
+            <p class="text-muted">Uzman önerileri ve güncel sağlık bilgileri</p>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="icon-circle mb-3">
+                        <i class="fas fa-heart fa-2x text-primary"></i>
+                    </div>
+                    <h3 class="h5">Kalp Sağlığı</h3>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Düzenli egzersiz yapın</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Sağlıklı beslenin</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Stresten uzak durun</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Tansiyonunuzu kontrol edin</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="icon-circle mb-3">
+                        <i class="fas fa-brain fa-2x text-primary"></i>
+                    </div>
+                    <h3 class="h5">Zihinsel Sağlık</h3>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Düzenli uyku alın</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Meditasyon yapın</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Sosyal kalın</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Hobiler edinin</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="icon-circle mb-3">
+                        <i class="fas fa-apple-alt fa-2x text-primary"></i>
+                    </div>
+                    <h3 class="h5">Beslenme</h3>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Dengeli beslenin</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Bol su için</li>
+                        <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Sebze ve meyve tüketin</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Porsiyon kontrolü yapın</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Özellikler -->
+    <div class="features-section py-5 bg-light rounded-3 mb-5">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-12 mb-4">
+                    <h2>Neler Sunuyoruz?</h2>
+                    <p class="text-muted">Size özel geliştirilmiş sağlık takip araçları</p>
+                </div>
+                
+                <div class="col-md-3 mb-4">
+                    <div class="feature-item">
+                        <div class="icon-circle mb-3">
+                            <i class="fas fa-calendar-check fa-2x text-primary"></i>
+                        </div>
+                        <h4 class="h5">Randevu Takibi</h4>
+                        <p class="text-muted">Tüm sağlık randevularınızı tek yerden yönetin</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 mb-4">
+                    <div class="feature-item">
+                        <div class="icon-circle mb-3">
+                            <i class="fas fa-chart-line fa-2x text-primary"></i>
+                        </div>
+                        <h4 class="h5">Sağlık Metrikleri</h4>
+                        <p class="text-muted">Sağlık verilerinizi düzenli olarak takip edin</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 mb-4">
+                    <div class="feature-item">
+                        <div class="icon-circle mb-3">
+                            <i class="fas fa-bell fa-2x text-primary"></i>
+                        </div>
+                        <h4 class="h5">Akıllı Hatırlatıcılar</h4>
+                        <p class="text-muted">Önemli sağlık aktivitelerinizi unutmayın</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 mb-4">
+                    <div class="feature-item">
+                        <div class="icon-circle mb-3">
+                            <i class="fas fa-user-md fa-2x text-primary"></i>
+                        </div>
+                        <h4 class="h5">Doktor Takibi</h4>
+                        <p class="text-muted">Doktorlarınızla iletişimde kalın</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sağlık Makaleleri -->
+    <div class="row mb-5">
+        <div class="col-12 text-center mb-4">
+            <h2>Güncel Sağlık Bilgileri</h2>
+            <p class="text-muted">Uzmanlardan güncel sağlık makaleleri</p>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow-sm">
+                <img src="{{ url_for('static', filename='img/article1.jpg') }}" class="card-img-top" alt="Bağışıklık Sistemi">
+                <div class="card-body">
+                    <h5>Bağışıklık Sistemini Güçlendirme</h5>
+                    <p class="text-muted">Doğal yollarla bağışıklık sisteminizi nasıl güçlendirebileceğinizi öğrenin.</p>
+                    <a href="#" class="btn btn-outline-primary">Devamını Oku</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow-sm">
+                <img src="{{ url_for('static', filename='img/article2.jpg') }}" class="card-img-top" alt="Stres Yönetimi">
+                <div class="card-body">
+                    <h5>Stres Yönetimi</h5>
+                    <p class="text-muted">Günlük hayatta stresi azaltmanın etkili yöntemlerini keşfedin.</p>
+                    <a href="#" class="btn btn-outline-primary">Devamını Oku</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow-sm">
+                <img src="{{ url_for('static', filename='img/article3.jpg') }}" class="card-img-top" alt="Sağlıklı Yaşam">
+                <div class="card-body">
+                    <h5>Sağlıklı Yaşam Alışkanlıkları</h5>
+                    <p class="text-muted">Yaşam kalitenizi artıracak günlük alışkanlıklar edinin.</p>
+                    <a href="#" class="btn btn-outline-primary">Devamını Oku</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- İstatistikler -->
+    <div class="stats-section py-5 bg-primary text-white text-center rounded-3">
+        <div class="row">
+            <div class="col-md-3 mb-4 mb-md-0">
+                <div class="stat-item">
+                    <i class="fas fa-users fa-3x mb-3"></i>
+                    <h3>10,000+</h3>
+                    <p class="mb-0">Aktif Kullanıcı</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4 mb-md-0">
+                <div class="stat-item">
+                    <i class="fas fa-calendar-check fa-3x mb-3"></i>
+                    <h3>50,000+</h3>
+                    <p class="mb-0">Randevu Takibi</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4 mb-md-0">
+                <div class="stat-item">
+                    <i class="fas fa-user-md fa-3x mb-3"></i>
+                    <h3>1,000+</h3>
+                    <p class="mb-0">Uzman Doktor</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <i class="fas fa-chart-line fa-3x mb-3"></i>
+                    <h3>100,000+</h3>
+                    <p class="mb-0">Sağlık Ölçümü</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.hero-section {
+    background: linear-gradient(135deg, #0d6efd 0%, #0dcaf0 100%);
+    color: white;
+    padding: 100px 0;
+    border-radius: 15px;
+    margin-bottom: 50px;
+}
+
+.icon-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(13, 110, 253, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    transition: transform 0.2s;
+}
+
+.card:hover .icon-circle {
+    transform: scale(1.1);
+}
+
+.feature-item {
+    padding: 20px;
+    transition: transform 0.2s;
+}
+
+.feature-item:hover {
+    transform: translateY(-5px);
+}
+
+.card {
+    transition: transform 0.2s;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card img {
+    transition: transform 0.3s;
+}
+
+.card:hover img {
+    transform: scale(1.05);
+}
+
+.btn {
+    transition: all 0.2s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.stat-item {
+    padding: 20px;
+}
+
+.stat-item i {
+    opacity: 0.8;
+}
+
+.stat-item h3 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 50px 0;
+    }
+    
+    .stat-item {
+        margin-bottom: 30px;
+    }
+}
+</style>
+{% endblock %} 

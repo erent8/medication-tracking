@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <!-- Profil Bilgileri -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h3 class="card-title">
+                        <i class="fas fa-user-circle me-2"></i>{{ kullanici.ad }} {{ kullanici.soyad }}
+                    </h3>
+                    <p class="text-muted">
+                        <i class="fas fa-envelope me-2"></i>{{ kullanici.email }}
+                    </p>
+                    <p class="text-muted">
+                        <i class="fas fa-phone me-2"></i>{{ kullanici.telefon }}
+                    </p>
+                    <p class="text-muted">
+                        <i class="fas fa-calendar me-2"></i>{{ kullanici.dogum_tarihi.strftime('%d.%m.%Y') }}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ana İçerik -->
+        <div class="col-md-8">
+            <!-- Aktif Reçeteler -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-prescription me-2"></i>Aktif Reçeteler
+                    </h4>
+                </div>
+                <div class="card-body">
+                    {% if aktif_receteler %}
+                        {% for recete in aktif_receteler %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title mb-0">{{ recete.ilac.ad }}</h5>
+                                    <span class="badge bg-primary">{{ recete.ilac.kategori }}</span>
+                                </div>
+                                <p class="text-muted small">
+                                    <i class="fas fa-user-md me-1"></i>Dr. {{ recete.doktor_adi }}
+                                </p>
+                                <p class="card-text">
+                                    <strong>Dozaj:</strong> {{ recete.dozaj }}<br>
+                                    <strong>Başlangıç:</strong> {{ recete.baslangic_tarihi.strftime('%d.%m.%Y') }}<br>
+                                    <strong>Bitiş:</strong> {{ recete.bitis_tarihi.strftime('%d.%m.%Y') }}
+                                </p>
+                                {% if recete.notlar %}
+                                <p class="card-text"><small>{{ recete.notlar }}</small></p>
+                                {% endif %}
+                                <form method="POST" action="{{ url_for('recete_durum_guncelle', recete_id=recete.id) }}" class="mt-2">
+                                    <select name="durum" class="form-select form-select-sm" onchange="this.form.submit()">
+                                        <option value="Aktif" {% if recete.durum == 'Aktif' %}selected{% endif %}>Aktif</option>
+                                        <option value="Tamamlandı" {% if recete.durum == 'Tamamlandı' %}selected{% endif %}>Tamamlandı</option>
+                                        <option value="İptal" {% if recete.durum == 'İptal' %}selected{% endif %}>İptal</option>
+                                    </select>
+                                </form>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted">Aktif reçeteniz bulunmamaktadır.</p>
+                    {% endif %}
+                    <div class="text-end">
+                        <a href="{{ url_for('recete_ekle') }}" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>Yeni Reçete Ekle
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- İlaç Hatırlatıcıları -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-bell me-2"></i>İlaç Hatırlatıcıları
+                    </h4>
+                </div>
+                <div class="card-body">
+                    {% if hatirlaticilar %}
+                        {% for hatirlatici in hatirlaticilar %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title mb-0">{{ hatirlatici.ilac.ad }}</h5>
+                                    <span class="badge bg-info">{{ hatirlatici.zaman.strftime('%H:%M') }}</span>
+                                </div>
+                                <p class="card-text">
+                                    <small class="text-muted">
+                                        Günler: 
+                                        {% set gunler = hatirlatici.gunler.split(',') %}
+                                        {% for gun in gunler %}
+                                            {% if gun == '1' %}Pzt{% endif %}
+                                            {% if gun == '2' %}Sal{% endif %}
+                                            {% if gun == '3' %}Çar{% endif %}
+                                            {% if gun == '4' %}Per{% endif %}
+                                            {% if gun == '5' %}Cum{% endif %}
+                                            {% if gun == '6' %}Cmt{% endif %}
+                                            {% if gun == '7' %}Paz{% endif %}
+                                        {% endfor %}
+                                    </small>
+                                </p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted">Aktif hatırlatıcınız bulunmamaktadır.</p>
+                    {% endif %}
+                    <div class="text-end">
+                        <a href="{{ url_for('hatirlatici_ekle') }}" class="btn btn-info">
+                            <i class="fas fa-plus me-2"></i>Yeni Hatırlatıcı Ekle
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sağlık Takibi -->
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-heartbeat me-2"></i>Sağlık Takibi
+                    </h4>
+                </div>
+                <div class="card-body">
+                    {% if saglik_takipler %}
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Tarih</th>
+                                        <th>Tip</th>
+                                        <th>Değer</th>
+                                        <th>Birim</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for takip in saglik_takipler %}
+                                    <tr>
+                                        <td>{{ takip.tarih.strftime('%d.%m.%Y %H:%M') }}</td>
+                                        <td>{{ takip.tip }}</td>
+                                        <td>{{ takip.deger }}</td>
+                                        <td>{{ takip.birim }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">Henüz sağlık takip kaydınız bulunmamaktadır.</p>
+                    {% endif %}
+                    <div class="text-end">
+                        <a href="{{ url_for('saglik_takip_ekle') }}" class="btn btn-success">
+                            <i class="fas fa-plus me-2"></i>Yeni Ölçüm Ekle
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+
+{% block title %}Profil Güncelle - İlaç Takip{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center py-3">
+                    <h4 class="card-title mb-0">
+                        <i class="fas fa-user-edit me-2"></i>Profil Bilgilerini Güncelle
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" action="{{ url_for('auth.update_profile') }}" class="needs-validation" novalidate>
+                        <!-- Kişisel Bilgiler -->
+                        <h5 class="mb-3">
+                            <i class="fas fa-user me-2"></i>Kişisel Bilgiler
+                        </h5>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="ad" class="form-label">Ad</label>
+                                <input type="text" class="form-control" id="ad" name="ad" value="{{ current_user.ad }}" required>
+                                <div class="invalid-feedback">
+                                    Lütfen adınızı girin.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="soyad" class="form-label">Soyad</label>
+                                <input type="text" class="form-control" id="soyad" name="soyad" value="{{ current_user.soyad }}" required>
+                                <div class="invalid-feedback">
+                                    Lütfen soyadınızı girin.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="dogum_tarihi" class="form-label">Doğum Tarihi</label>
+                                <input type="date" class="form-control" id="dogum_tarihi" name="dogum_tarihi" 
+                                       value="{{ current_user.dogum_tarihi.strftime('%Y-%m-%d') if current_user.dogum_tarihi }}" required>
+                                <div class="invalid-feedback">
+                                    Lütfen doğum tarihinizi seçin.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="cinsiyet" class="form-label">Cinsiyet</label>
+                                <select class="form-select" id="cinsiyet" name="cinsiyet" required>
+                                    <option value="">Seçiniz</option>
+                                    <option value="E" {% if current_user.cinsiyet == 'E' %}selected{% endif %}>Erkek</option>
+                                    <option value="K" {% if current_user.cinsiyet == 'K' %}selected{% endif %}>Kadın</option>
+                                    <option value="D" {% if current_user.cinsiyet == 'D' %}selected{% endif %}>Diğer</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Lütfen cinsiyet seçin.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- İletişim Bilgileri -->
+                        <h5 class="mb-3 mt-4">
+                            <i class="fas fa-address-card me-2"></i>İletişim Bilgileri
+                        </h5>
+                        
+                        <div class="mb-3">
+                            <label for="telefon" class="form-label">Telefon Numarası</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-phone"></i>
+                                </span>
+                                <input type="tel" class="form-control" id="telefon" name="telefon" 
+                                       value="{{ current_user.telefon }}" pattern="[0-9]{10}" placeholder="5XX XXX XX XX" required>
+                            </div>
+                            <div class="invalid-feedback">
+                                Lütfen geçerli bir telefon numarası girin.
+                            </div>
+                        </div>
+                        
+                        <!-- Sağlık Bilgileri -->
+                        <h5 class="mb-3 mt-4">
+                            <i class="fas fa-heartbeat me-2"></i>Sağlık Bilgileri
+                        </h5>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="kan_grubu" class="form-label">Kan Grubu</label>
+                                <select class="form-select" id="kan_grubu" name="kan_grubu">
+                                    <option value="">Seçiniz</option>
+                                    {% for grup in ['A Rh+', 'A Rh-', 'B Rh+', 'B Rh-', '0 Rh+', '0 Rh-', 'AB Rh+', 'AB Rh-'] %}
+                                        <option value="{{ grup }}" {% if current_user.kan_grubu == grup %}selected{% endif %}>{{ grup }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="boy" class="form-label">Boy (cm)</label>
+                                <input type="number" class="form-control" id="boy" name="boy" 
+                                       value="{{ current_user.boy }}" min="0" max="300">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="kronik_hastaliklar" class="form-label">Kronik Hastalıklar</label>
+                            <textarea class="form-control" id="kronik_hastaliklar" name="kronik_hastaliklar" rows="2">{{ current_user.kronik_hastaliklar }}</textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="alerjiler" class="form-label">Alerjiler</label>
+                            <textarea class="form-control" id="alerjiler" name="alerjiler" rows="2">{{ current_user.alerjiler }}</textarea>
+                        </div>
+                        
+                        <!-- Bildirim Tercihleri -->
+                        <h5 class="mb-3 mt-4">
+                            <i class="fas fa-bell me-2"></i>Bildirim Tercihleri
+                        </h5>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="bildirim_email" name="bildirim_email"
+                                       {% if current_user.bildirim_email %}checked{% endif %}>
+                                <label class="form-check-label" for="bildirim_email">E-posta Bildirimleri</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="bildirim_sms" name="bildirim_sms"
+                                       {% if current_user.bildirim_sms %}checked{% endif %}>
+                                <label class="form-check-label" for="bildirim_sms">SMS Bildirimleri</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="bildirim_push" name="bildirim_push"
+                                       {% if current_user.bildirim_push %}checked{% endif %}>
+                                <label class="form-check-label" for="bildirim_push">Mobil Bildirimler</label>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Değişiklikleri Kaydet
+                            </button>
+                            <a href="{{ url_for('main.profile') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Profile Dön
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Form doğrulama
+(function() {
+    'use strict';
+    var forms = document.querySelectorAll('.needs-validation');
+    Array.prototype.slice.call(forms).forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+})();
+
+// Telefon numarası formatı
+document.getElementById('telefon').addEventListener('input', function(e) {
+    let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
+    e.target.value = !x[2] ? x[1] : x[1] + ' ' + x[2] + (x[3] ? ' ' + x[3] : '') + (x[4] ? ' ' + x[4] : '');
+});
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.card {
+    border: none;
+    border-radius: 15px;
+}
+
+.card-header {
+    border-radius: 15px 15px 0 0 !important;
+}
+
+.input-group-text {
+    background-color: transparent;
+    border-right: none;
+}
+
+.form-control {
+    border-left: none;
+}
+
+.form-control:focus {
+    border-color: #dee2e6;
+    box-shadow: none;
+}
+
+.input-group .form-control:focus ~ .input-group-text {
+    border-color: #dee2e6;
+}
+
+.btn {
+    padding: 12px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+h5 {
+    color: #0d6efd;
+    font-weight: 600;
+}
+
+.form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+</style>
+{% endblock %} 

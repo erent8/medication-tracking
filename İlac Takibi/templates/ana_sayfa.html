@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="bg-gradient-to-r from-blue-600 to-indigo-700 py-16 mb-6">
+    <div class="container">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bold mb-4">Sağlığınız İçin Akıllı Takip</h1>
+            <p class="lead mb-4">İlaçlarınızı takip edin, sağlık verilerinizi yönetin ve kişiselleştirilmiş önerilerden faydalanın.</p>
+            {% if 'kullanici_id' not in session %}
+            <div class="mt-4">
+                <a href="{{ url_for('kayit') }}" class="btn btn-light btn-lg me-2">Hemen Başlayın</a>
+                <a href="{{ url_for('giris') }}" class="btn btn-outline-light btn-lg">Giriş Yap</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Sağlık İpuçları Section -->
+<div class="container mb-6">
+    <h2 class="text-center mb-4">Günlük Sağlık İpuçları</h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="text-primary mb-3">
+                        <i class="fas fa-clock fa-2x"></i>
+                    </div>
+                    <h5 class="card-title">Düzenli İlaç Kullanımı</h5>
+                    <p class="card-text">İlaçlarınızı düzenli kullanmak tedavinin başarısı için çok önemlidir.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="text-primary mb-3">
+                        <i class="fas fa-heart fa-2x"></i>
+                    </div>
+                    <h5 class="card-title">Sağlıklı Yaşam</h5>
+                    <p class="card-text">Dengeli beslenme ve düzenli egzersiz sağlıklı bir yaşamın temelidir.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="text-primary mb-3">
+                        <i class="fas fa-notes-medical fa-2x"></i>
+                    </div>
+                    <h5 class="card-title">Düzenli Kontrol</h5>
+                    <p class="card-text">Düzenli sağlık kontrolleri erken teşhis için önemlidir.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- İlaç Kategorileri -->
+<div class="container mb-6">
+    <h2 class="text-center mb-4">İlaç Kategorileri</h2>
+    
+    <div class="kategori-filtre text-center mb-4">
+        <button class="btn btn-outline-primary kategori-badge active" data-kategori="hepsi">
+            <i class="fas fa-pills me-1"></i>Tümü
+        </button>
+        {% for kategori in kategoriler %}
+        <button class="btn btn-outline-primary kategori-badge" data-kategori="{{ kategori }}">
+            <i class="fas fa-tag me-1"></i>{{ kategori }}
+        </button>
+        {% endfor %}
+    </div>
+    
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for ilac in ilaclar %}
+        <div class="col ilac-card" data-kategori="{{ ilac.kategori }}">
+            <div class="card h-100 border-0 shadow-sm hover-shadow">
+                <div class="card-body">
+                    <h5 class="card-title text-primary">{{ ilac.ad }}</h5>
+                    <span class="badge bg-secondary mb-2">{{ ilac.kategori }}</span>
+                    <p class="card-text text-muted">{{ ilac.kullanim_amaci }}</p>
+                    <div class="mt-3">
+                        <a href="{{ url_for('ilac_detay', ilac_id=ilac.id) }}" class="btn btn-primary w-100">
+                            <i class="fas fa-info-circle me-1"></i> Detayları Gör
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- İstatistikler Section -->
+<div class="bg-light py-5 mb-6">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3 mb-4 mb-md-0">
+                <h2 class="text-primary">10,000+</h2>
+                <p class="text-muted">Aktif Kullanıcı</p>
+            </div>
+            <div class="col-md-3 mb-4 mb-md-0">
+                <h2 class="text-primary">5,000+</h2>
+                <p class="text-muted">Kayıtlı İlaç</p>
+            </div>
+            <div class="col-md-3 mb-4 mb-md-0">
+                <h2 class="text-primary">50,000+</h2>
+                <p class="text-muted">Günlük Hatırlatma</p>
+            </div>
+            <div class="col-md-3">
+                <h2 class="text-primary">%98</h2>
+                <p class="text-muted">Memnuniyet Oranı</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const kategoriButtons = document.querySelectorAll('.kategori-badge');
+    const ilacCards = document.querySelectorAll('.ilac-card');
+    
+    kategoriButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const secilenKategori = this.dataset.kategori;
+            
+            // Aktif buton stilini güncelle
+            kategoriButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            // İlaçları filtrele
+            ilacCards.forEach(card => {
+                if (secilenKategori === 'hepsi' || card.dataset.kategori === secilenKategori) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+});
+</script>
+
+<style>
+.hover-shadow:hover {
+    transform: translateY(-5px);
+    transition: transform 0.3s ease;
+}
+</style>
+{% endblock %} 

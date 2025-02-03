@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="card-title text-primary mb-0">{{ ilac.ad }}</h1>
+                <span class="badge bg-primary">{{ ilac.kategori }}</span>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 mb-4">
+                    <div class="card bg-light border-0">
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                <i class="fas fa-info-circle me-2"></i>Kullanım Amacı
+                            </h4>
+                            <p class="card-text">{{ ilac.kullanim_amaci }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 mb-4">
+                    <div class="card bg-light border-0">
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                <i class="fas fa-check-circle me-2"></i>Faydaları
+                            </h4>
+                            <div class="card-text">
+                                {{ ilac.faydalar | safe }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 mb-4">
+                    <div class="card bg-light border-0">
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                <i class="fas fa-prescription-bottle me-2"></i>Dozaj
+                            </h4>
+                            <p class="card-text">{{ ilac.dozaj }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 mb-4">
+                    <div class="card bg-light border-0">
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                <i class="fas fa-random me-2"></i>İlaç Etkileşimleri
+                            </h4>
+                            <p class="card-text">{{ ilac.etkilesimler }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 mb-4">
+                    <div class="alert alert-warning">
+                        <h4 class="alert-heading">
+                            <i class="fas fa-exclamation-triangle me-2"></i>Yan Etkileri
+                        </h4>
+                        <p class="mb-0">{{ ilac.yan_etkiler }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <a href="{{ url_for('ana_sayfa') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Geri Dön
+                </a>
+                {% if 'kullanici_id' in session %}
+                    <a href="{{ url_for('recete_ekle') }}" class="btn btn-primary">
+                        <i class="fas fa-prescription me-2"></i>Reçete Ekle
+                    </a>
+                    <a href="{{ url_for('hatirlatici_ekle') }}" class="btn btn-info">
+                        <i class="fas fa-bell me-2"></i>Hatırlatıcı Ekle
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

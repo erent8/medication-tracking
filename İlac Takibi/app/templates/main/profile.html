@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block title %}Profil - İlaç Takip{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <!-- Sol Kolon: Profil Kartı -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center py-3">
+                    <div class="profile-avatar mb-3">
+                        <i class="fas fa-user-circle fa-5x"></i>
+                    </div>
+                    <h4 class="mb-0">{{ current_user.ad }} {{ current_user.soyad }}</h4>
+                </div>
+                <div class="card-body">
+                    <div class="profile-info">
+                        <div class="info-item mb-3">
+                            <i class="fas fa-envelope text-primary me-2"></i>
+                            <span>{{ current_user.email }}</span>
+                        </div>
+                        <div class="info-item mb-3">
+                            <i class="fas fa-phone text-primary me-2"></i>
+                            <span>{{ current_user.telefon }}</span>
+                        </div>
+                        <div class="info-item mb-3">
+                            <i class="fas fa-calendar text-primary me-2"></i>
+                            <span>{{ current_user.dogum_tarihi.strftime('%d.%m.%Y') }}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-venus-mars text-primary me-2"></i>
+                            <span>
+                                {% if current_user.cinsiyet == 'E' %}
+                                    Erkek
+                                {% elif current_user.cinsiyet == 'K' %}
+                                    Kadın
+                                {% else %}
+                                    Diğer
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('auth.update_profile') }}" class="btn btn-primary">
+                            <i class="fas fa-user-edit me-2"></i>Profili Düzenle
+                        </a>
+                        <a href="{{ url_for('auth.change_password') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-key me-2"></i>Şifre Değiştir
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sağ Kolon: Detaylı Bilgiler -->
+        <div class="col-md-8">
+            <!-- Sağlık Bilgileri -->
+            <div class="card shadow-lg mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-heartbeat me-2"></i>Sağlık Bilgileri
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted">Kan Grubu</label>
+                            <p class="mb-0">{{ current_user.kan_grubu or 'Belirtilmemiş' }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted">Boy</label>
+                            <p class="mb-0">{{ current_user.boy or 'Belirtilmemiş' }} cm</p>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="text-muted">Kronik Hastalıklar</label>
+                        <p class="mb-0">{{ current_user.kronik_hastaliklar or 'Belirtilmemiş' }}</p>
+                    </div>
+                    <div class="mb-0">
+                        <label class="text-muted">Alerjiler</label>
+                        <p class="mb-0">{{ current_user.alerjiler or 'Belirtilmemiş' }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bildirim Tercihleri -->
+            <div class="card shadow-lg mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-bell me-2"></i>Bildirim Tercihleri
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="notification-preferences">
+                        <div class="preference-item mb-2">
+                            <i class="fas fa-envelope me-2 {% if current_user.bildirim_email %}text-success{% else %}text-muted{% endif %}"></i>
+                            <span>E-posta Bildirimleri</span>
+                            <span class="badge {% if current_user.bildirim_email %}bg-success{% else %}bg-secondary{% endif %} float-end">
+                                {{ 'Aktif' if current_user.bildirim_email else 'Pasif' }}
+                            </span>
+                        </div>
+                        <div class="preference-item mb-2">
+                            <i class="fas fa-sms me-2 {% if current_user.bildirim_sms %}text-success{% else %}text-muted{% endif %}"></i>
+                            <span>SMS Bildirimleri</span>
+                            <span class="badge {% if current_user.bildirim_sms %}bg-success{% else %}bg-secondary{% endif %} float-end">
+                                {{ 'Aktif' if current_user.bildirim_sms else 'Pasif' }}
+                            </span>
+                        </div>
+                        <div class="preference-item">
+                            <i class="fas fa-mobile-alt me-2 {% if current_user.bildirim_push %}text-success{% else %}text-muted{% endif %}"></i>
+                            <span>Mobil Bildirimler</span>
+                            <span class="badge {% if current_user.bildirim_push %}bg-success{% else %}bg-secondary{% endif %} float-end">
+                                {{ 'Aktif' if current_user.bildirim_push else 'Pasif' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Hesap Güvenliği -->
+            <div class="card shadow-lg">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-shield-alt me-2"></i>Hesap Güvenliği
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="security-info">
+                        <div class="info-item mb-3">
+                            <i class="fas fa-clock text-warning me-2"></i>
+                            <span>Son Şifre Değişikliği:</span>
+                            <span class="float-end">{{ current_user.son_sifre_degisikligi.strftime('%d.%m.%Y') if current_user.son_sifre_degisikligi else 'Belirtilmemiş' }}</span>
+                        </div>
+                        <div class="info-item mb-3">
+                            <i class="fas fa-sign-in-alt text-warning me-2"></i>
+                            <span>Son Giriş:</span>
+                            <span class="float-end">{{ current_user.son_giris.strftime('%d.%m.%Y %H:%M') if current_user.son_giris else 'Belirtilmemiş' }}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-map-marker-alt text-warning me-2"></i>
+                            <span>Son Giriş Konumu:</span>
+                            <span class="float-end">{{ current_user.son_giris_konum or 'Belirtilmemiş' }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.card {
+    border: none;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.card-header {
+    border-radius: 15px 15px 0 0 !important;
+}
+
+.profile-avatar {
+    color: white;
+    transition: transform 0.3s;
+}
+
+.profile-avatar:hover {
+    transform: scale(1.1);
+}
+
+.info-item {
+    font-size: 0.95rem;
+}
+
+.preference-item {
+    padding: 10px;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+}
+
+.preference-item:hover {
+    background-color: #f8f9fa;
+}
+
+.security-info .info-item {
+    padding: 10px;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+}
+
+.security-info .info-item:hover {
+    background-color: #f8f9fa;
+}
+
+.btn {
+    padding: 12px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+</style>
+{% endblock %} 

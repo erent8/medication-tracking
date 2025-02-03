@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+
+{% block title %}Ayarlar - İlaç Takip{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center py-3">
+                    <h4 class="card-title mb-0">
+                        <i class="fas fa-cog me-2"></i>Uygulama Ayarları
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" action="{{ url_for('main.settings') }}" class="needs-validation" novalidate>
+                        <!-- Bildirim Ayarları -->
+                        <h5 class="mb-3">
+                            <i class="fas fa-bell me-2"></i>Bildirim Ayarları
+                        </h5>
+                        
+                        <div class="mb-4">
+                            <div class="form-check form-switch mb-3">
+                                <input type="checkbox" class="form-check-input" id="bildirim_email" name="bildirim_email"
+                                       {% if current_user.bildirim_email %}checked{% endif %}>
+                                <label class="form-check-label" for="bildirim_email">
+                                    <i class="fas fa-envelope me-2"></i>E-posta Bildirimleri
+                                </label>
+                                <small class="form-text text-muted d-block">İlaç hatırlatıcıları ve randevu bildirimleri e-posta ile gönderilir.</small>
+                            </div>
+                            
+                            <div class="form-check form-switch mb-3">
+                                <input type="checkbox" class="form-check-input" id="bildirim_sms" name="bildirim_sms"
+                                       {% if current_user.bildirim_sms %}checked{% endif %}>
+                                <label class="form-check-label" for="bildirim_sms">
+                                    <i class="fas fa-sms me-2"></i>SMS Bildirimleri
+                                </label>
+                                <small class="form-text text-muted d-block">Önemli hatırlatıcılar ve acil durumlar SMS ile bildirilir.</small>
+                            </div>
+                            
+                            <div class="form-check form-switch">
+                                <input type="checkbox" class="form-check-input" id="bildirim_push" name="bildirim_push"
+                                       {% if current_user.bildirim_push %}checked{% endif %}>
+                                <label class="form-check-label" for="bildirim_push">
+                                    <i class="fas fa-mobile-alt me-2"></i>Mobil Bildirimler
+                                </label>
+                                <small class="form-text text-muted d-block">Anlık bildirimler mobil cihazınıza gönderilir.</small>
+                            </div>
+                        </div>
+                        
+                        <!-- Gizlilik Ayarları -->
+                        <h5 class="mb-3">
+                            <i class="fas fa-user-shield me-2"></i>Gizlilik Ayarları
+                        </h5>
+                        
+                        <div class="mb-4">
+                            <div class="form-check form-switch mb-3">
+                                <input type="checkbox" class="form-check-input" id="veri_paylasimi" name="veri_paylasimi"
+                                       {% if current_user.veri_paylasimi %}checked{% endif %}>
+                                <label class="form-check-label" for="veri_paylasimi">
+                                    <i class="fas fa-chart-bar me-2"></i>Anonim Veri Paylaşımı
+                                </label>
+                                <small class="form-text text-muted d-block">İlaç kullanım istatistiklerinin anonim olarak paylaşılmasına izin ver.</small>
+                            </div>
+                            
+                            <div class="form-check form-switch">
+                                <input type="checkbox" class="form-check-input" id="konum_paylasimi" name="konum_paylasimi"
+                                       {% if current_user.konum_paylasimi %}checked{% endif %}>
+                                <label class="form-check-label" for="konum_paylasimi">
+                                    <i class="fas fa-map-marker-alt me-2"></i>Konum Paylaşımı
+                                </label>
+                                <small class="form-text text-muted d-block">Yakındaki eczaneleri bulmak için konum bilgisini kullan.</small>
+                            </div>
+                        </div>
+                        
+                        <!-- Dil Ayarları -->
+                        <h5 class="mb-3">
+                            <i class="fas fa-language me-2"></i>Dil Ayarları
+                        </h5>
+                        
+                        <div class="mb-4">
+                            <select class="form-select" id="dil" name="dil">
+                                <option value="tr" {% if current_user.dil == 'tr' %}selected{% endif %}>Türkçe</option>
+                                <option value="en" {% if current_user.dil == 'en' %}selected{% endif %}>English</option>
+                            </select>
+                            <small class="form-text text-muted">Uygulama dilini değiştir.</small>
+                        </div>
+                        
+                        <!-- Görünüm Ayarları -->
+                        <h5 class="mb-3">
+                            <i class="fas fa-palette me-2"></i>Görünüm Ayarları
+                        </h5>
+                        
+                        <div class="mb-4">
+                            <div class="form-check form-switch mb-3">
+                                <input type="checkbox" class="form-check-input" id="karanlik_mod" name="karanlik_mod"
+                                       {% if current_user.karanlik_mod %}checked{% endif %}>
+                                <label class="form-check-label" for="karanlik_mod">
+                                    <i class="fas fa-moon me-2"></i>Karanlık Mod
+                                </label>
+                                <small class="form-text text-muted d-block">Karanlık temayı etkinleştir.</small>
+                            </div>
+                            
+                            <div class="form-check form-switch">
+                                <input type="checkbox" class="form-check-input" id="yuksek_kontrast" name="yuksek_kontrast"
+                                       {% if current_user.yuksek_kontrast %}checked{% endif %}>
+                                <label class="form-check-label" for="yuksek_kontrast">
+                                    <i class="fas fa-adjust me-2"></i>Yüksek Kontrast
+                                </label>
+                                <small class="form-text text-muted d-block">Daha iyi okunabilirlik için kontrastı artır.</small>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Ayarları Kaydet
+                            </button>
+                            <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Ana Sayfaya Dön
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Form doğrulama
+(function() {
+    'use strict';
+    var forms = document.querySelectorAll('.needs-validation');
+    Array.prototype.slice.call(forms).forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+})();
+
+// Karanlık mod değişikliği
+document.getElementById('karanlik_mod').addEventListener('change', function() {
+    document.body.classList.toggle('dark-mode', this.checked);
+});
+
+// Yüksek kontrast değişikliği
+document.getElementById('yuksek_kontrast').addEventListener('change', function() {
+    document.body.classList.toggle('high-contrast', this.checked);
+});
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.card {
+    border: none;
+    border-radius: 15px;
+}
+
+.card-header {
+    border-radius: 15px 15px 0 0 !important;
+}
+
+h5 {
+    color: #0d6efd;
+    font-weight: 600;
+}
+
+.form-check-input {
+    cursor: pointer;
+}
+
+.form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.form-switch .form-check-input {
+    width: 3em;
+}
+
+.form-check-label {
+    cursor: pointer;
+}
+
+.btn {
+    padding: 12px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+/* Karanlık Mod */
+body.dark-mode {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+body.dark-mode .card {
+    background-color: #2d2d2d;
+}
+
+body.dark-mode .form-control,
+body.dark-mode .form-select {
+    background-color: #1a1a1a;
+    border-color: #404040;
+    color: #ffffff;
+}
+
+/* Yüksek Kontrast */
+body.high-contrast {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+body.high-contrast .card {
+    background-color: #1a1a1a;
+}
+
+body.high-contrast .btn-primary {
+    background-color: #ffff00;
+    border-color: #ffff00;
+    color: #000000;
+}
+
+body.high-contrast .form-check-input:checked {
+    background-color: #ffff00;
+    border-color: #ffff00;
+}
+</style>
+{% endblock %} 

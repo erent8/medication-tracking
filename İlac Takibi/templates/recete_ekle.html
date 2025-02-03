@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h1 class="card-title text-primary mb-4">
+                        <i class="fas fa-prescription me-2"></i>Yeni Reçete Ekle
+                    </h1>
+
+                    <form method="POST">
+                        <div class="mb-4">
+                            <label for="hasta_adi" class="form-label">
+                                <i class="fas fa-user me-2"></i>Hasta Adı
+                            </label>
+                            <input type="text" class="form-control" id="hasta_adi" name="hasta_adi" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="ilac_id" class="form-label">
+                                <i class="fas fa-pills me-2"></i>İlaç
+                            </label>
+                            <select class="form-select" id="ilac_id" name="ilac_id" required>
+                                <option value="">İlaç Seçin</option>
+                                {% for ilac in ilaclar %}
+                                <option value="{{ ilac.id }}">{{ ilac.ad }} ({{ ilac.kategori }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label for="baslangic_tarihi" class="form-label">
+                                    <i class="fas fa-calendar-plus me-2"></i>Başlangıç Tarihi
+                                </label>
+                                <input type="date" class="form-control" id="baslangic_tarihi" name="baslangic_tarihi" required>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <label for="bitis_tarihi" class="form-label">
+                                    <i class="fas fa-calendar-minus me-2"></i>Bitiş Tarihi
+                                </label>
+                                <input type="date" class="form-control" id="bitis_tarihi" name="bitis_tarihi" required>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Reçete Ekle
+                            </button>
+                            <a href="{{ url_for('ana_sayfa') }}" class="btn btn-secondary">
+                                <i class="fas fa-times me-2"></i>İptal
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

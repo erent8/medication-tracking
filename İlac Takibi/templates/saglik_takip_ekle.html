@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">
+                        <i class="fas fa-heartbeat me-2"></i>Yeni Sağlık Ölçümü
+                    </h2>
+                    
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="tip" class="form-label">
+                                <i class="fas fa-stethoscope me-2"></i>Ölçüm Tipi
+                            </label>
+                            <select class="form-select" id="tip" name="tip" required>
+                                <option value="">Ölçüm Tipi Seçin</option>
+                                <option value="Tansiyon">Tansiyon</option>
+                                <option value="Şeker">Kan Şekeri</option>
+                                <option value="Ateş">Vücut Sıcaklığı</option>
+                                <option value="Nabız">Nabız</option>
+                                <option value="Kilo">Kilo</option>
+                                <option value="Kolesterol">Kolesterol</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="deger" class="form-label">
+                                <i class="fas fa-calculator me-2"></i>Ölçüm Değeri
+                            </label>
+                            <input type="number" step="0.1" class="form-control" id="deger" name="deger" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="birim" class="form-label">
+                                <i class="fas fa-ruler me-2"></i>Birim
+                            </label>
+                            <select class="form-select" id="birim" name="birim" required>
+                                <option value="">Birim Seçin</option>
+                                <option value="mmHg">mmHg (Tansiyon)</option>
+                                <option value="mg/dL">mg/dL (Kan Şekeri)</option>
+                                <option value="°C">°C (Vücut Sıcaklığı)</option>
+                                <option value="bpm">bpm (Nabız)</option>
+                                <option value="kg">kg (Kilo)</option>
+                                <option value="mg/dL">mg/dL (Kolesterol)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="notlar" class="form-label">
+                                <i class="fas fa-sticky-note me-2"></i>Notlar
+                            </label>
+                            <textarea class="form-control" id="notlar" name="notlar" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Ölçüm Kaydet
+                            </button>
+                            <a href="{{ url_for('profil') }}" class="btn btn-secondary">
+                                <i class="fas fa-times me-2"></i>İptal
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('tip').addEventListener('change', function() {
+    const birimSelect = document.getElementById('birim');
+    const tip = this.value;
+    
+    // Birim seçeneklerini ölçüm tipine göre filtrele
+    Array.from(birimSelect.options).forEach(option => {
+        if (option.value === '') return; // Boş seçeneği atla
+        
+        const shouldShow = (
+            (tip === 'Tansiyon' && option.value === 'mmHg') ||
+            (tip === 'Şeker' && option.value === 'mg/dL') ||
+            (tip === 'Ateş' && option.value === '°C') ||
+            (tip === 'Nabız' && option.value === 'bpm') ||
+            (tip === 'Kilo' && option.value === 'kg') ||
+            (tip === 'Kolesterol' && option.value === 'mg/dL')
+        );
+        
+        option.style.display = shouldShow ? '' : 'none';
+    });
+    
+    // İlk uygun birimi seç
+    const firstVisibleOption = Array.from(birimSelect.options).find(option => 
+        option.style.display !== 'none'
+    );
+    if (firstVisibleOption) {
+        birimSelect.value = firstVisibleOption.value;
+    }
+});
+</script>
+{% endblock %} 

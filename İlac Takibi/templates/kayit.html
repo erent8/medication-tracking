@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">
+                        <i class="fas fa-user-plus me-2"></i>Yeni Hesap Oluştur
+                    </h2>
+                    
+                    <form method="POST">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="ad" class="form-label">
+                                    <i class="fas fa-user me-2"></i>Ad
+                                </label>
+                                <input type="text" class="form-control" id="ad" name="ad" required>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="soyad" class="form-label">
+                                    <i class="fas fa-user me-2"></i>Soyad
+                                </label>
+                                <input type="text" class="form-control" id="soyad" name="soyad" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label">
+                                <i class="fas fa-envelope me-2"></i>E-posta
+                            </label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="parola" class="form-label">
+                                <i class="fas fa-lock me-2"></i>Parola
+                            </label>
+                            <input type="password" class="form-control" id="parola" name="parola" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="telefon" class="form-label">
+                                <i class="fas fa-phone me-2"></i>Telefon
+                            </label>
+                            <input type="tel" class="form-control" id="telefon" name="telefon" required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="dogum_tarihi" class="form-label">
+                                <i class="fas fa-calendar me-2"></i>Doğum Tarihi
+                            </label>
+                            <input type="date" class="form-control" id="dogum_tarihi" name="dogum_tarihi" required>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-user-plus me-2"></i>Kayıt Ol
+                            </button>
+                            <a href="{{ url_for('giris') }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-sign-in-alt me-2"></i>Giriş Yap
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

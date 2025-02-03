@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">
+                        <i class="fas fa-bell me-2"></i>Yeni İlaç Hatırlatıcısı
+                    </h2>
+                    
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="ilac_id" class="form-label">
+                                <i class="fas fa-pills me-2"></i>İlaç
+                            </label>
+                            <select class="form-select" id="ilac_id" name="ilac_id" required>
+                                <option value="">İlaç Seçin</option>
+                                {% for ilac in ilaclar %}
+                                <option value="{{ ilac.id }}">{{ ilac.ad }} ({{ ilac.kategori }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="zaman" class="form-label">
+                                <i class="fas fa-clock me-2"></i>Hatırlatma Zamanı
+                            </label>
+                            <input type="time" class="form-control" id="zaman" name="zaman" required>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label">
+                                <i class="fas fa-calendar-alt me-2"></i>Hatırlatma Günleri
+                            </label>
+                            <div class="d-flex flex-wrap gap-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="gunler" value="1" id="gun1">
+                                    <label class="form-check-label" for="gun1">Pazartesi</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="gunler" value="2" id="gun2">
+                                    <label class="form-check-label" for="gun2">Salı</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="gunler" value="3" id="gun3">
+                                    <label class="form-check-label" for="gun3">Çarşamba</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="gunler" value="4" id="gun4">
+                                    <label class="form-check-label" for="gun4">Perşembe</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="gunler" value="5" id="gun5">
+                                    <label class="form-check-label" for="gun5">Cuma</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="gunler" value="6" id="gun6">
+                                    <label class="form-check-label" for="gun6">Cumartesi</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="gunler" value="7" id="gun7">
+                                    <label class="form-check-label" for="gun7">Pazar</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Hatırlatıcı Ekle
+                            </button>
+                            <a href="{{ url_for('profil') }}" class="btn btn-secondary">
+                                <i class="fas fa-times me-2"></i>İptal
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
